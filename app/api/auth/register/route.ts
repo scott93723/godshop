@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { getDb } from "@/lib/db";
 import { hashPassword, createSession } from "@/lib/auth";
 
 export async function POST(request: Request) {
@@ -27,6 +27,7 @@ export async function POST(request: Request) {
     );
   }
 
+  const prisma = await getDb();
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
     return NextResponse.json({ error: "此 Email 已註冊" }, { status: 409 });

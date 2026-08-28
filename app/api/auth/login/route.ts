@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { getDb } from "@/lib/db";
 import { verifyPassword, createSession } from "@/lib/auth";
 
 export async function POST(request: Request) {
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "請輸入 Email 與密碼" }, { status: 400 });
   }
 
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await (await getDb()).user.findUnique({ where: { email } });
   if (!user || !(await verifyPassword(password, user.passwordHash))) {
     return NextResponse.json({ error: "Email 或密碼錯誤" }, { status: 401 });
   }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/db";
+import { getDb } from "@/lib/db";
 import { getSessionUserId } from "@/lib/auth";
 import type { OrderDTO } from "@/lib/types";
 import OrdersList from "@/components/commerce/OrdersList";
@@ -51,7 +51,7 @@ export default async function OrdersPage() {
   const userId = await getSessionUserId();
   if (!userId) redirect("/login?next=/orders");
 
-  const orders = await prisma.order.findMany({
+  const orders = await (await getDb()).order.findMany({
     where: { userId },
     include: {
       items: {

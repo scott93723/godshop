@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { getDb } from "@/lib/db";
 import type { ProductDTO } from "@/lib/types";
 
 type ProductRow = {
@@ -24,11 +24,13 @@ export function toDTO(p: ProductRow): ProductDTO {
 }
 
 export async function getAllProducts(): Promise<ProductDTO[]> {
+  const prisma = await getDb();
   const rows = await prisma.product.findMany({ orderBy: { price: "desc" } });
   return rows.map(toDTO);
 }
 
 export async function getFeaturedProducts(): Promise<ProductDTO[]> {
+  const prisma = await getDb();
   const rows = await prisma.product.findMany({ where: { featured: true } });
   return rows.map(toDTO);
 }
@@ -36,6 +38,7 @@ export async function getFeaturedProducts(): Promise<ProductDTO[]> {
 export async function getProductBySlug(
   slug: string
 ): Promise<ProductDTO | null> {
+  const prisma = await getDb();
   const row = await prisma.product.findUnique({ where: { slug } });
   return row ? toDTO(row) : null;
 }

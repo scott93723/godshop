@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { getDb } from "@/lib/db";
 import { getSessionUserId } from "@/lib/auth";
 import type { OrderDTO } from "@/lib/types";
 
@@ -57,6 +57,7 @@ export async function GET() {
   if (!userId) {
     return NextResponse.json({ error: "未登入" }, { status: 401 });
   }
+  const prisma = await getDb();
   const orders = await prisma.order.findMany({
     where: { userId },
     include: includeItems,
@@ -90,6 +91,8 @@ export async function POST(request: Request) {
   if (!Array.isArray(body.items) || body.items.length === 0) {
     return NextResponse.json({ error: "購物車是空的" }, { status: 400 });
   }
+
+  const prisma = await getDb();
 
   // Server-side price recomputation — never trust client prices.
   const ids = [...new Set(body.items.map((i) => i.productId ?? ""))];

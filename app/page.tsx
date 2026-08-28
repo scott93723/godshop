@@ -52,10 +52,11 @@ const PERKS: { icon: LucideIcon; en: string; zh: string; desc: string }[] = [
   },
 ];
 
-export default async function Home() {
-  const featured = await getFeaturedProducts();
+// Data comes from the D1 binding at request time — never prerender at build.
+export const dynamic = "force-dynamic";
 
-  return (
+export default async function Home() {
+  const featured = await getFeaturedProducts();  return (
     <>
       {/* ---------- HERO ---------- */}
       <section className="relative h-[92vh] overflow-hidden">

@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const products = [
+export const products = [
   {
     slug: "aura-x1-pro",
     name: "AURA X1 Pro 旗艦手機",
@@ -173,9 +173,13 @@ async function main() {
   console.log(`Seeded ${products.length} products.`);
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+// Only run when executed directly (`tsx prisma/seed.ts`), not when imported
+// by seed-sql.ts for SQL generation.
+if (process.argv[1]?.endsWith("seed.ts")) {
+  main()
+    .catch((e) => {
+      console.error(e);
+      process.exit(1);
+    })
+    .finally(() => prisma.$disconnect());
+}

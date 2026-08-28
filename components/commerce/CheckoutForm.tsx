@@ -108,9 +108,9 @@ export default function CheckoutForm() {
         router.push("/login?next=/checkout");
         return;
       }
-      const data: OrderDTO | { error?: string } = await res
-        .json()
-        .catch(() => ({}));
+      const data = (await res.json().catch(() => ({}))) as
+        | OrderDTO
+        | { error?: string };
       if (!res.ok) {
         setApiError(
           "error" in data && data.error ? data.error : "下單失敗，請稍後再試"

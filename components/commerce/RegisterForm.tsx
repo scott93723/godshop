@@ -44,7 +44,9 @@ export default function RegisterForm() {
           password,
         }),
       });
-      const data: { error?: string } = await res.json().catch(() => ({}));
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+      };
       if (!res.ok) {
         setApiError(data.error ?? "註冊失敗，請稍後再試");
         setSubmitting(false);

@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "GODSHOP 全系列未來科技裝備:手機、耳機、穿戴、筆電、無人機、VR、平板。360° 3D 實機預覽,所見即所得。",
 };
 
+// Data comes from the D1 binding at request time — never prerender at build.
+export const dynamic = "force-dynamic";
+
 export default async function ProductsPage() {
   const products = await getAllProducts();
 

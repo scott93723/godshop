@@ -20,7 +20,9 @@ export default function LoginForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data: { error?: string } = await res.json().catch(() => ({}));
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+      };
       if (!res.ok) {
         setError(data.error ?? "登入失敗，請稍後再試");
         setSubmitting(false);

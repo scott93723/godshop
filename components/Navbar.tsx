@@ -34,7 +34,7 @@ export default function Navbar() {
   useEffect(() => {
     fetch("/api/auth/me")
       .then((r) => (r.ok ? r.json() : null))
-      .then((data: Me | null) => setUser(data))
+      .then((data) => setUser(data as Me | null))
       .catch(() => setUser(null));
   }, []);
 
